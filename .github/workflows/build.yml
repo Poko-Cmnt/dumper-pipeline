@@ -1,0 +1,41 @@
+name: Build AndUEDumper
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Android NDK
+        id: ndk
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26d
+          add-to-path: true
+
+      - name: Export NDK_HOME for Makefile
+        run: |
+          echo "NDK_HOME=$ANDROID_NDK_HOME" >> "$GITHUB_ENV"
+          echo "Using ANDROID_NDK_HOME=$ANDROID_NDK_HOME"
+
+      - name: Clone AndUEDumper
+        run: |
+          git clone --recursive https://github.com/MJx0/AndUEDumper.git
+          cd AndUEDumper
+          git submodule update --init --recursive
+
+      - name: Build via ndk-build.sh
+        working-directory: AndUEDumper/AndUEDumper
+        run: |
+          chmod +x ndk-build.sh
+          ./ndk-build.sh
+
+      - name: Upload build artifacts (libs & obj)
+        uses: actions/upload-artifact@v4
+        with:
+          name: AndUEDumper-build
+          path: |
+            AndUEDumper/AndUEDumper/build/libs
+            AndUEDumper/AndUEDumper/build/obj
+            
