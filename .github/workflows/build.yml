@@ -28,7 +28,7 @@ jobs:
       - name: My Patch
         working-directory: AndUEDumper/AndUEDumper
         run: |
-          sed -i '/uintptr_t param_1/a LOGI("GNames_Enc: %lx", (param_1 - GetUE4ELF().base()));' ./src/UE/UEGameProfiles/PUBG.hpp
+          sed -i '/uintptr_t param_1/a LOGI("GNames_Enc: %lx", (param_1 - GetUnrealELF().base()));' ./src/UE/UEGameProfiles/PUBG.hpp
 
       - name: Build via ndk-build.sh
         working-directory: AndUEDumper/AndUEDumper
