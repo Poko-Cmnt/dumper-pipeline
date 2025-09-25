@@ -29,6 +29,7 @@ jobs:
         working-directory: AndUEDumper/AndUEDumper
         run: |
           sed -i '/uintptr_t param_1/a LOGI("GNames_Enc: %lx", (param_1 - GetUnrealELF().base()));' ./src/UE/UEGameProfiles/PUBG.hpp
+          sed -i '/GetNamesPtr() const override/{n;/^[[:space:]]*{/a return GetUnrealELF().base() + 0x10EF1F00;}' ./src/UE/UEGameProfiles/ArenaBreakout.hpp
 
       - name: Build via ndk-build.sh
         working-directory: AndUEDumper/AndUEDumper
